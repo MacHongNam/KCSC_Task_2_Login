@@ -58,20 +58,24 @@
             $repassword = $_POST["repassword"];
             $address = $_POST["address"];
             $phonenumber = $_POST["phonenumber"];
-            if ($password != $repassword) {
-                die("Repassword does not match\t");
-            }
+            
             $sql = "SELECT * FROM `task_2` WHERE username ='$username' ";
-            $old = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($old) != 0) {
-                echo ("Username has been existed");
+            $result = mysqli_query($conn, $sql);
+            $row = mysqli_fetch_assoc($result);
+
+            if ($row != 0) {
+                echo "<script type='text/javascript'>alert('Username already exists!');</script>";
+            } else if ($password != $repassword) {
+                echo "<script type='text/javascript'>alert('Repassword does not match');</script>";
             } else {
                 $password = md5($password);
                 $sql = "INSERT INTO task_2 (username, password, address, phonenumber) 
                         VALUES ('$username','$password','$address','$phonenumber') ";
-                $query = mysqli_query($conn, $sql);
-                if ($query != 0) {
+                $result  = mysqli_query($conn, $sql);
+                if ($result) {
                     echo "<script type='text/javascript'>alert('Register successed');</script>";
+                } else {
+                    echo "Failed: " . mysqli_error($conn);
                 }
             }
         }
