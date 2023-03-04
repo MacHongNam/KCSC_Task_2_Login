@@ -43,31 +43,28 @@
 
         $conn = mysqli_connect("localhost", "root", "", "task_2");
         if (!$conn) {
-            echo "Connection failed!";
+            echo "<script type='text/javascript'>alert('Connection failed!');</script>";
         }
 
         if (isset($_POST['login'])) {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-
+            $username = ($_POST['username']);
+            $password = ($_POST['password']);
             $password = md5($password);
-            $sql = "SELECT * FROM `task_2` WHERE username ='$username' AND password='$password' ";
-            $query = mysqli_query($conn, $sql);
 
-            if (mysqli_num_rows($query) != 0) {
-                $rows = mysqli_fetch_assoc($query);
+            $sql = "SELECT * FROM `task_2` WHERE username ='$username' AND password='$password' ";
+            $result = mysqli_query($conn, $sql);
+            $row = mysqli_fetch_assoc($result);
+            if ($row == 0) {
+                die("<script type='text/javascript'>alert('Wrong username or password');</script>");
+            } else {
                 $_SESSION['id'] = $rows['id'];
                 $_SESSION['username'] = $rows['username'];
-                $_SESSION['password'] = $rows['password'];
                 header('location: index.php');
-            } else {
-                echo "<script type='text/javascript'>alert('Wrong username or password');</script>";
             }
         }
         if (isset($_POST['register'])) {
             header('location:register.php');
         }
-
         ?>
     </body>
 </center>
