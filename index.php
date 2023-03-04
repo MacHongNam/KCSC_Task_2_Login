@@ -20,6 +20,24 @@
     </nav>
 
     <div class="container">
+        <?php
+        if (isset($_GET['msg'])) {
+            $msg = $_GET['msg'];
+            echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                ' . $msg . '
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
+        }
+        ?>
+        <!-- tìm kiếm -->
+        <div>
+            <form action="index.php" class="d-flex p-3" method="post">
+                <label for="username" class="fw-bold d-flex justify-content-center align-items-center m-2 ">Search:</label>
+                <input class="form-control me-2" id="username" type="search" name="username" placeholder="Search by username" aria-label="Search">
+                <button class="btn btn-outline-danger" name="search" type="submit">Search</button>
+            </form>
+        </div>
+
         <table class="table table-hover text-center">
             <thead class="table-dark">
                 <tr>
@@ -29,22 +47,35 @@
                     <th scope="col">Phone Number</th>
                 </tr>
             </thead>
+
             <tbody>
                 <?php
+                session_start();
                 $conn = mysqli_connect("localhost", "root", "", "task_2");
-                $sql = "SELECT * FROM `task_2`";
-                $result = mysqli_query($conn, $sql);
-                while ($row = mysqli_fetch_assoc($result)) {
+                if (!$conn) {
+                    echo "<script type='text/javascript'>alert('Connection failed!');</script>";
+                }                                       
+                if (isset($_POST['search'])) {
+                    $username = $_POST['username'];
+
+                    $sql = "SELECT * FROM `task_2` WHERE username = '$username'";
+                    $result = mysqli_query($conn, $sql);
+                    while ($row = mysqli_fetch_assoc($result)) {
                 ?>
-                    <tr>
-                        <td><?php echo $row['id'] ?></td>
-                        <td><?php echo $row['username'] ?></td>
-                        <td><?php echo $row['address'] ?></td>
-                        <td><?php echo $row['phonenumber'] ?></td>
-                    </tr>
-                <?php
+                        <tr>
+                            <td><?php echo $row['id'] ?></td>
+                            <td><?php echo $row['username'] ?></td>
+                            <td><?php echo $row['address'] ?></td>
+                            <td><?php echo $row['phonenumber'] ?></td>
+                        </tr>
+                <?php 
+                    }
+                    if (mysqli_num_rows($result) == 0) {
+                        echo "<script type='text/javascript'>alert('Username already exists!');</script>";
+                    }
                 }
                 ?>
+
             </tbody>
         </table>
 
