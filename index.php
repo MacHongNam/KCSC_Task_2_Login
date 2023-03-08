@@ -60,18 +60,18 @@
 
                     $sql = "SELECT * FROM `task_2` WHERE username = '$username'";
                     $result = mysqli_query($conn, $sql);
-                    while ($row = mysqli_fetch_assoc($result)) {
+                    while ($rows = mysqli_fetch_assoc($result)) {
                 ?>
                         <tr>
-                            <td><?php echo $row['id'] ?></td>
-                            <td><?php echo $row['username'] ?></td>
-                            <td><?php echo $row['address'] ?></td>
-                            <td><?php echo $row['phonenumber'] ?></td>
+                            <td><?php echo $rows['id'] ?></td>
+                            <td><?php echo $rows['username'] ?></td>
+                            <td><?php echo $rows['address'] ?></td>
+                            <td><?php echo $rows['phonenumber'] ?></td>
                         </tr>
                 <?php 
                     }
                     if (mysqli_num_rows($result) == 0) {
-                        echo "<script type='text/javascript'>alert('Username already exists!');</script>";
+                        echo "<script type='text/javascript'>alert('Username does not exist!');</script>";
                     }
                 }
                 ?>
